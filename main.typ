@@ -1,0 +1,206 @@
+#import "book-style.typ": *
+#import "@preview/theorion:0.3.3": *
+#import "@preview/commute:0.3.0": node, arr, commutative-diagram
+#import cosmos.rainbow: *
+
+
+#show: show-theorion
+
+#show: rest => book(title: [$infinity$-范畴讲义], 
+authors: "Aki Sakuchan", 
+bib-file: "references.bib",
+rest)
+
+
+
+= 公理化定义
+本章的目标是不给出无穷范畴的分析式的定义，而是通过公理化的办法给出综合式的定义。也就是把无穷范畴视为元概念，讨论它应该满足的公理。
+就像你不能不能在欧式几何中分析地定义什么是"点，线，面"，
+但是你可以给出它们应该满足的公理。而通过实数理论，就可以给出点的分析式定义，也就是 $RR^3$ 中的元素。
+而线可以定义为下列实系数方程组的解空间，这里方程组系数线性无关：
+#nonum-equation($
+                   cases(a_1 x + b_1 y + c_1 z &= d_1,
+                    a_2 x + b_2 y + c_2 z &= d_2)
+                $)
+面可以定义为单个一次方程的解空间，圆等几何对象也有类似定义。从这个例子可以看出，所谓分析的观点更关注对象的具体结构，或者说是它的内涵，
+而综合的观点则关注对象应该满足的性质，或者说它和其他对象的关系。
+
+本章主要内容来自@cnossen2025[Chapter 1] 在后面几章会给出满足这个定义的一些模型，比如*拟范畴*，*单纯充实范畴*，*拓扑充实范畴*。
+
+在一般的数学理论中，两个数学对象我们仅仅是讨论它们相等还是不相等。但实际上相等亦有程度上的区别，比如说相等的两个集合，往往因为上面赋予不同的数学结构而被视为不同的数学对象。
+有时候两个数学对象，在某个层面上相等，然而在另一个层面就被认为不相等了，比如在代数学中，只要两个向量空间的维数相同那么就认为它们同构，然而在泛函分析中仅仅是维数相同还不够。
+反过来，有时候也认为相同的东西在更底层不相同，比如代数拓扑中同伦的空间不一定同胚。因此*我们不但要指出两个对象是否相等，还要给出它们如何相等*，这允许我们讨论两个数学对象之间相等的程度。
+
+== 范畴，函子和自然同构
+本文不会用一阶语言来给出范畴公理，那实在是过于繁琐了。
+#axiom[
+    #enum(numbering: "(1)")[
+        有一些数学对象，称为 *$(infinity,1)$-范畴*， 经常简称为*无穷范畴*, 记为 $cal(C), cal(D), cal(E) dots$ 等。
+        ][
+            给定两个无穷范畴 $cal(C)$ 和 $cal(D)$，它们之间可以有*函子*，也称为 *$1$-态射* $f : cal(C) -> cal(D)$。
+            每个 $cal(C)$ 都有到它自身的恒等函子 $id : cal(C) -> cal(C)$。
+            给定两个函子 $f : cal(C) -> cal(D)$ 和 $g : cal(D) -> cal(E)$，则有（横向）复合函子 $g compose f : cal(C) -> cal(E)$ 也是一个函子。
+        ][
+            给定两个函子 $f,f' : cal(C) -> cal(D)$, 它们之间可以有*自然变换*， 也称为 *$2$-态射* $alpha : f -> f'$。
+            每个函子 $f$ 都有单位自然变换 $id_f : f -> f$。
+            给定两个自然变换 $alpha : f -> f'$ 和 $beta : f' -> f''$, 则有（纵向）复合 $beta compose alpha : f -> f''$。
+        ][
+            给定两个自然变换 $alpha,alpha' : f -> f'$，它们之间也可以有 *$3$-态射* $alpha -> alpha'$。
+        ][
+            上面过程可以迭代下去，两个 $(m-1)$-态射之间可以有 $m$-态射，每个 $(m-1)$-态射有到它自身的单位 $m$-态射，$m-1$-态射之间可以有复合，称为纵向复合，
+            此时，三个 $m-1$-态射之间的 $m$-态射的复合称为纵向复合。
+        ][
+            对每个 $m > 1$, $m$-态射在同伦意义下可逆，称为 $m$-同构（这个逆的含义下面解释）。
+        ]
+]
+这里把最后一条改为 $m > n$ 将得到 $(infinity, n)$-范畴，但是这种范畴我们将通过 $(infinity,n-1)$-范畴充实态射空间递归得到。
+而如果改为 $m > 0$ 将得到 $infinity$-群胚，但是这种范畴我们将定义为 *Kan 复形*。
+
+上述给出 $(m-1)$-态射之间如果有 $m$-同构，则认为它们相等，而按照直觉，这些复合应该满足结合律和单位律，然而这里的相等实际上是两个 $(m-1)$-态射之间的相等，自然应该要由 $m$-同构给出：
+#axiom(title:"结合律, 单位律和逆")[
+    $(m-1)$-态射的复合在 $m$-同构意义上满足我们希望的性质，也就是对于$(m-1)$-态射 $f: cal(C) -> cal(D), g: cal(D) -> cal(E)$ 和 $h: cal(E) -> cal(F)$，存在 $m$-同构使得有
+    / 结合律: $alpha_(f,g,h): (h compose g) compose f tilde.equiv h compose (g compose f)$。
+    / 单位律: $lambda_f : id_cal(D) compose f tilde.equiv f$ 和 $rho_f : f compose id_cal(C) tilde.equiv f$。
+    / 逆律: 对每个 $m > 1$ 态射 $alpha : f -> f'$, 存在逆 $m$-态射 $alpha^(-1): f' -> f$ 和 $(m+1)$-同构 $lambda : alpha^(-1) compose alpha tilde.equiv id_f$ 以及 $rho: alpha compose alpha^(-1) tilde.equiv id_(f')$
+]<axiom:结合单位逆>
+
+#axiom[
+    设有两个函子 $f,f':cal(C) -> cal(D)$ 之间的自然同构 $alpha: f tilde.equiv f'$ 和 $g,g':cal(D) -> cal(E)$ 的之间的自然同构 $beta: g tilde.equiv g'$,
+    那么有自然同构 $beta * alpha : g compose f tilde.equiv g' compose f'$, 称为自然变换的水平复合，水平复合也要满足单位律和结合律。
+]<axiom:水平复合>
+这个公理当然也可以推广到 $m$-态射当中，但我们省略。
+
+#definition(title: "交换方块")[
+    函子的*交换方块*是形如
+    #align(center)[#commutative-diagram(
+        node((0,0),$cal(C)$),
+        node((0,1),$cal(D)$),
+        node((1,0),$cal(C')$),
+        node((1,1),$cal(D')$),
+        arr((0,0),(0,1),$f$),
+        arr((0,0),(1,0),$g$,label-pos:right),
+        arr((0,1),(1,1),$h$),
+        arr((1,0),(1,1),$f'$,label-pos: right)
+    )]
+    这里 $f,g,h,f'$ 是函子，并且有自然同构 $alpha : h compose f tilde.equiv f' compose g$. 而函子的*交换三角*指的是
+    #align(center, commutative-diagram(
+        node((1, 0), $C$),
+        node((0, 1), $D$),
+        node((1, 2), $E$),
+        arr((1, 0), (0, 1), $f$),
+        arr((0, 1), (1, 2), $g$),
+        arr((1, 0), (1, 2), $h$, label-pos: right),
+    ))
+    并且有自然同构 $alpha : h tilde.equiv g compose f$. 类似地，也可以定义 $m$-态射的交换方块和交换三角。
+]
+
+现在我们可以考虑范畴等价的问题了，范畴同构是范畴等价的一种，但是这是很强的一种相等，而按照上面的观点，相等的程度也是要给出的，因此有：
+#definition[
+    函子 $f: cal(C) -> cal(D)$ 称为范畴等价(equivalence)，
+    指的是存在另一个函子 $g: cal(D) -> cal(C)$ 和自然同构 $g f tilde.equiv id_cal(C)$ 和 $f g tilde.equiv id_cal(D)$。
+    此时我们说 $g$ 是 $f$ 的一个逆。
+]
+
+#lemma[
+    函子 $f$ 是范畴等价当且仅当它同时有截面（函子 $g$ 使得 $f g tilde.equiv id_cal(D)$）和缩回（函子 $g$ 使得 $h f tilde.equiv id_cal(C)$, 
+    并且在这种情况下 $g tilde.equiv h$.
+]
+#proof[
+    必要性显然。反过来如果有 $f g tilde.equiv id_cal(D)$ 和 $h f tilde.equiv id_cal(C)$，
+    则利用@axiom:结合单位逆 和 @axiom:水平复合 可得 $h tilde.equiv h f g tilde.equiv g$。此时易得 $g$ 或者 $h$ 就是 $f$ 的逆。
+]
+
+#note-box[
+    注意由上面引理立刻得到函子的逆在同构意义下唯一，记为 $f^(-1): cal(D) -> cal(C)$。
+]
+
+#lemma[
+    如果函子 $f:cal(C) -> cal(D)$ 和 $f' : cal(D) -> cal(E)$ 是范畴等价，其逆为 $g : cal(D) -> cal(C)$ 和 $g' : cal(E) -> cal(D)$,
+    那么其复合 $f'f : cal(C) -> cal(E)$ 也是范畴等价，并且有逆 $g g' : cal(E) -> cal(C)$.
+]<lemma:范畴等价的复合还是等价>
+#proof[
+    同样借助@axiom:结合单位逆 和 @axiom:水平复合 可得 $f' f g g' tilde.equiv f'g' tilde.equiv id_cal(E)$ 以及
+    $g g' f' f tilde.equiv g f tilde.equiv id_cal(C)$.
+]
+
+#lemma[
+    范畴等价满足三选二性质：给定函子 $f : cal(C) -> cal(D)$ 和 $g : cal(D) -> cal(E)$, 如果 $f,g$ 和 $g f$ 这三个函子中有两个是范畴等价，那么剩下一个也是。
+]
+#proof[
+    如果 $f,g$ 是等价，则根据@lemma:范畴等价的复合还是等价 可以得到 $g f$ 是范畴等价。如果 $f$ 和 $g f$ 是等价，那么 $g$ 可以写作
+    $g tilde.equiv g compose id_cal(D) tilde.equiv g compose f compose f^(-1) = g f compose f^(-1)$, 也就是两个范畴等价的复合，那么还是范畴等价。
+    类似地可以证明 $g$ 和 $g f$ 是范畴等价时，$f$ 也是范畴等价。 
+]
+
+== 对象，态射
+我们希望普通范畴是一种特殊的无穷范畴，为此有：
+#axiom[
+    每个普通范畴都是无穷范畴。 每个普通的函子 $f: cal(C) -> cal(D)$ 是无穷范畴之间的函子。每个普通的自然同构 $alpha: f tilde.equiv f'$ 是无穷范畴的函子之间的自然同构。
+]
+借助这个公理，我们可以讨论无穷范畴的对象了。设 $[n]$ 表示标准单形，也就是这样的普通范畴：
+#nonum-equation($[n] = { 0 <= 1 <= dots.h.c <= n}$)
+又设 $d_i,s_i$ 分别是面映射和退化映射。那么有
+#definition[
+    设 $cal(C)$ 是无穷范畴。
+    #enum(numbering: "(1)")[
+        $cal(C)$ 的对象指的是函子 $x : [0] -> cal(C)$。
+    ][
+        $cal(C)$ 的态射（可以称为 $0$-态射）是函子 $f:[1] -> cal(C)$。而 $f$ 的*源*与*目标*分别记作 $f(0)$ 和 $f(1)$, 定义为:
+        #nonum-equation($
+                          f(0): [0] -->^(d_1) [1] -->^f cal(C)
+                          "    和    "
+                          f(1): [1] -->^(d_0) [1] -->^f cal(C)
+                        $)
+        而 $f : x -> y$ 表示有自然同构 $x tilde.equiv f(0)$ 和 $y tilde.equiv f(1)$。
+    ][
+        $cal(C)$ 中的交换三角指的是函子 $sigma : [2] -> cal(C)$. 交换三角经常记为
+        #align(center, commutative-diagram(
+        node((1, 0), $x$),
+        node((0, 1), $y$),
+        node((1, 2), $z$),
+        arr((1, 0), (0, 1), $f$),
+        arr((0, 1), (1, 2), $g$),
+        arr((1, 0), (1, 2), $h$, label-pos: right),
+    ))
+    这里 $f = sigma compose d_2$, $g = sigma compose d_0$, $h = sigma compose d_1$。
+    ]
+]
+
+#example[
+    给定 $cal(C)$ 中的一个对象 $x$, 它是函子 $x : [0] -> cal(C)$.
+    我们定义它的单位态射 $id_x$ 是复合函子 $[1]->^(s_0) [0] ->^x cal(C)$. 由于下列两个复合显然是自然同构：
+    #nonum-equation($
+                      [0] -->^(d_1) [1] -->^(s_0) [0]
+                      "    和    "
+                      [0] -->^(d_0) [1] -->^(s_0) [0]
+                    $)
+    因此 $id_x$ 的源和目标都同构于 $x$.
+]
+
+#lemma[
+    对每个态射 $f : x -> y$，有交换三角
+    #align(center)[
+        #commutative-diagram(
+        node((1, 0), $x$),
+        node((0, 1), $x$),
+        node((1, 2), $y$),
+        arr((1, 0), (0, 1), $id_x$),
+        arr((0, 1), (1, 2), $f$),
+        arr((1, 0), (1, 2), $f$, label-pos: right),
+    )
+    和
+    #commutative-diagram(
+        node((1, 0), $x$),
+        node((0, 1), $y$),
+        node((1, 2), $y$),
+        arr((1, 0), (0, 1), $f$),
+        arr((0, 1), (1, 2), $id_y$),
+        arr((1, 0), (1, 2), $f$, label-pos: right),
+    )
+    ]
+    这个两个三角表示了 $f tilde.equiv f compose id_x$ 和 $f tilde.equiv id_y compose f$.
+]
+
+== Segal 公理和 Rezk 公理
+
+= 拟范畴
