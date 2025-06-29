@@ -33,7 +33,7 @@ $]
 
 == 范畴，函子和自然同构
 本文不会用一阶语言来给出范畴公理，那实在是过于繁琐了。
-#axiom[
+#axiom(title: "A.1")[
     #enum(numbering: "(1)")[
         有一些数学对象，称为 *$(infinity,1)$-范畴*， 经常简称为*无穷范畴*, 记为 $cal(C), cal(D), cal(E) dots$ 等。
         ][
@@ -57,14 +57,14 @@ $]
 而如果改为 $m > 0$ 将得到 $infinity$-群胚，但是这种范畴我们将定义为 *Kan 复形*。
 
 上述给出 $(m-1)$-态射之间如果有 $m$-同构，则认为它们相等，而按照直觉，这些复合应该满足结合律和单位律，然而这里的相等实际上是两个 $(m-1)$-态射之间的相等，自然应该要由 $m$-同构给出：
-#axiom(title:"结合律, 单位律和逆")[
+#axiom(title:"A.2")[
     $(m-1)$-态射的复合在 $m$-同构意义上满足我们希望的性质，也就是对于$(m-1)$-态射 $f: cal(C) -> cal(D), g: cal(D) -> cal(E)$ 和 $h: cal(E) -> cal(F)$，存在 $m$-同构使得有
     / 结合律: $alpha_(f,g,h): (h compose g) compose f tilde.equiv h compose (g compose f)$。
     / 单位律: $lambda_f : id_cal(D) compose f tilde.equiv f$ 和 $rho_f : f compose id_cal(C) tilde.equiv f$。
     / 逆律: 对每个 $m > 1$ 态射 $alpha : f -> f'$, 存在逆 $m$-态射 $alpha^(-1): f' -> f$ 和 $(m+1)$-同构 $lambda : alpha^(-1) compose alpha tilde.equiv id_f$ 以及 $rho: alpha compose alpha^(-1) tilde.equiv id_(f')$
 ]<axiom:结合单位逆>
 
-#axiom[
+#axiom(title: "A.3")[
     设有两个函子 $f,f':cal(C) -> cal(D)$ 之间的自然同构 $alpha: f tilde.equiv f'$ 和 $g,g':cal(D) -> cal(E)$ 的之间的自然同构 $beta: g tilde.equiv g'$,
     那么有自然同构 $beta * alpha : g compose f tilde.equiv g' compose f'$, 称为自然变换的水平复合，水平复合也要满足单位律和结合律。
 ]<axiom:水平复合>
@@ -96,7 +96,7 @@ $]
 
 现在我们可以考虑范畴等价的问题了，范畴同构是范畴等价的一种，但是这是很强的一种相等，而按照上面的观点，相等的程度也是要给出的，因此有：
 #definition[
-    函子 $f: cal(C) -> cal(D)$ 称为范畴等价(equivalence)，
+    函子 $f: cal(C) -> cal(D)$ 称为*范畴等价(equivalence)*，
     指的是存在另一个函子 $g: cal(D) -> cal(C)$ 和自然同构 $g f tilde.equiv id_cal(C)$ 和 $f g tilde.equiv id_cal(D)$。
     此时我们说 $g$ 是 $f$ 的一个逆。
 ]
@@ -134,7 +134,7 @@ $]
 
 == 对象，态射
 我们希望普通范畴是一种特殊的无穷范畴，为此有：
-#axiom[
+#axiom(title: "C")[
     每个普通范畴都是无穷范畴。 每个普通的函子 $f: cal(C) -> cal(D)$ 是无穷范畴之间的函子。每个普通的自然同构 $alpha: f tilde.equiv f'$ 是无穷范畴的函子之间的自然同构。
 ]
 借助这个公理，我们可以讨论无穷范畴的对象了。设 $[n]$ 表示标准单形，也就是这样的普通范畴：
@@ -153,7 +153,7 @@ $]
                         $)
         而 $f : x -> y$ 表示有自然同构 $x tilde.equiv f(0)$ 和 $y tilde.equiv f(1)$。
     ][
-        $cal(C)$ 中的交换三角指的是函子 $sigma : [2] -> cal(C)$. 交换三角经常记为
+        $cal(C)$ 中的*交换三角*指的是函子 $sigma : [2] -> cal(C)$. 交换三角经常记为
         #align(center, commutative-diagram(
         node((1, 0), $x$),
         node((0, 1), $y$),
@@ -210,6 +210,68 @@ $]
     因此我们考虑函子 $s_0 : [2] -> [1]$, 它把 $0,1$ 映射为 $0$，把 $2$ 映射为 $1$。
     这样我们注意到有函子 $sigma = f compose s_0 : [2] -> cal(C)$。 于是容易验证 $sigma compose d_0 = f$ 以及
     $sigma compose d_1 = f$。 而 $s_0 compose d_2$ 把 $[1]$ 映射为 $[0]$, 因此态射 $sigma compose d_2$ 的源和目标都是 $f(0)$，以及 $sigma compose d_2 = id_x$。对右图类似。
+]
+
+== 基本构造
+普通范畴论中可以从两三个对象创造处新对象，本节给出它们的无穷范畴版本。它们都是普通范畴论中的相应对象直接推广，但是要给出相等的程度，也就是把 $=$ 改为 $tilde.equiv$，并且给出相应的自然同构。
+
+=== 始对象和终对象
+#axiom(title: "B.1")[
+    空范畴 $emptyset$ 是无穷范畴里面的始对象：对每个无穷范畴 $cal(C)$，存在一个函子 $emptyset -> cal(C)$，如果有两个函子 $f,f': emptyset -> cal(C)$, 则存在自然同构 $f tilde.equiv f'$。
+]
+
+#axiom(title: "B.2")[
+    范畴 $[0]$ 是无穷范畴里面的终对象：对每个无穷范畴 $cal(C)$，存在一个函子 $p_cal(C) : cal(C) -> [0]$，如果有两个函子 $f,f':cal(C) -> [0]$，则存在自然同构 $f tilde.equiv f'$。
+]
+我们经常用 $*$ 表示 $[0]$。
+
+#definition[
+    设 $cal(C),cal(D)$ 是两个无穷范畴，$x$ 是 $cal(D)$ 中的某个对象。我们定义*常函子* $c_x : cal(C) -> cal(D)$ 为复合
+    #nonum-equation($
+                      c_x : cal(C) -> [0] ->^x cal(D)
+                    $)
+    
+    如果函子 $cal(C) -> *$ 是范畴等价，那么我们说 $cal(C)$ 是*可缩的(contractible)*。
+]
+#note-box[
+    可缩范畴的定义显然来自代数拓扑当中的可缩空间。自然有命题：$cal(C)$ 是可缩的当且仅当存在对象 $x : * -> cal(C)$ 使得常态射
+    $c_x : cal(C) -> cal(C)$ 自然同构于 $id_cal(C)$，此时这样一个自然同构 $H: c_x tilde.equiv id_cal(C)$ 称为 $cal(C)$ 在
+    $x$ 上的*收缩(contraction)*。证明过程和代数拓扑中一样。
+]
+
+#axiom(title: "B.1'")[
+    无穷范畴 $emptyset$ 是严格始对象：每个函子 $cal(C) -> emptyset$ 是等价。
+]
+
+=== 乘积和余积
+#axiom(title: [B.3 $infinity$-范畴的乘积])[
+    两个无穷范畴 $cal(C), cal(D)$ 的乘积，由对象 $cal(C) times cal(D)$ 和两个函子 
+    $"pr"_cal(C) : cal(C) times cal(D) -> cal(C)$，$"pr"_cal(D) : cal(C) times cal(D) -> cal(D)$，它们称为标准投射函子。
+    它们满足乘积的泛性质，但是要把等号 $=$ 改为存在自然变换 $tilde.equiv$，包括唯一性也要改为在自然同构意义下唯一。
+
+    这条公理说的就是任意两个无穷范畴都存在乘积范畴。
+]
+
+#lemma[
+    对于无穷范畴 $cal(C), cal(D)$，函子 $("pr"_cal(D),"pr"_cal(C)): cal(C) times cal(D) -> cal(D) times cal(C)$ 
+    是范畴等价，逆函子就是 $("pr"_cal(C),"pr"_cal(D)): cal(D) times cal(C) -> cal(C) times cal(D)$
+]
+这个引理给出了乘积的交换律。
+
+#lemma[
+    对无穷范畴 $cal(C)$，标准投射函子 $"pr"_cal(C): cal(C) times * -> cal(C)$ 是等价，
+    逆就是 $(id_cal(C),p_cal(C)): cal(C) -> cal(C) times *$
+]
+这个引理指出终范畴 $*$ 是乘积的单位元。
+
+对于结合律，有
+#lemma[
+    对无穷范畴 $cal(C),cal(D),cal(E)$，函子
+]
+
+#axiom(title: [B.4 $infinity$-范畴的余积])[
+    是上面公理的对偶版本，余积用 $product.co$ 表示。这条公理说任意两个无穷范畴 $cal(C), cal(D)$ 都存在余积 
+    $cal(C) product.co cal(D)$。
 ]
 
 == 交换方块公理，Segal 公理和 Rezk 公理
