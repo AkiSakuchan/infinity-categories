@@ -89,7 +89,7 @@
 // 无编号公式
 // 需要这么设置, 是 typst 的缺陷...
 #let nonum-equation(body) = {
-    math.equation($body$, numbering: none, block: true)
+    math.equation(body, numbering: none, block: true)
 }
 // 花体字母
 #let scr(it) = text(
