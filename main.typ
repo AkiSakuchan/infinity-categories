@@ -351,7 +351,164 @@ $]
 ]
 
 不难看出，这个公理实际上包含了@axiom:乘积：只要让 $cal(E) = *$ 即可。
+用类似前面的办法，通过泛性质可以证明下列交换律，结合律还有单位元：设有函子 $cal(C ->E)$，$cal(D -> E)$ 和 $cal(B -> E)$，
+于是就有范畴等价：
+#nonum-equation($
+                cal(C times_E D) &-->^tilde.equiv cal(D times_E C), \
+                cal(B times_E (C times_E D)) &-->^tilde.equiv cal((B times_E C) times_E D), \
+                cal(C times_E E) &-->^tilde.equiv cal(C)
+                $)
 
+类似地，拉回也具有函子性：如果有交换图
+#align(center, commutative-diagram(
+  node((0, 0), [$C$]),
+  node((0, 1), [$E$]),
+  node((0, 2), [$D$]),
+  node((1, 0), [$C'$]),
+  node((1, 1), [$E'$]),
+  node((1, 2), [$D'$]),
+  arr((0, 0), (0, 1), [$f$]),
+  arr((0, 2), (0, 1), [$g$], label-pos: right),
+  arr((0, 0), (1, 0), [$phi$], label-pos: right),
+  arr((0, 1), (1, 1), [$chi$]),
+  arr((0, 2), (1, 2), [$psi$]),
+  arr((1, 0), (1, 1), [$f'$], label-pos: right),
+  arr((1, 2), (1, 1), [$g'$]),
+))
+则有函子
+#nonum-equation($
+        phi times_chi psi := (phi compose "pr"_cal(C), psi compose "pr"_cal(D)) :
+        cal(C times_E D) --> cal(C' times_E' D')
+                $)
+不难证明这个函子对 $phi,psi,chi$ 具有函子性：如果设 $C'=C$，$E' = D' = E$，$phi = id_cal(C)$，$chi = id_E$，$psi=g$
+并且 $g$ 是范畴等价，那么 $cal(C times_E D) -> cal(C)$ 也是范畴等价，注意此时这个函子与 $"pr"_cal(C)$ 自然同构。
+
+拉回称为纤维积，这允许我们定义函子的纤维：
+#definition[
+    设 $f:cal(C) -> cal(D)$ 是函子。对每个 $cal(D)$ 的对象 $x$，我们定义 $f$ 在 $x$ 上的纤维 $f^(-1)(x)$ 为拉回
+    // https://t.yw.je/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRADMA9ACgFoBGAJTcAHoJABfUuky58hFP3JVajFmwDGjbgGFxUmdjwEiS-ivrNWiEFobcAIvukgMR+UTLnql9TYBUkiowUADm8ESg7ABOEAC2SGQgOBBI-AYcsQmISSlIAMwZMfEF1HmIAExFWWllqZU+atYcQRJAA
+#align(center, commutative-diagram(
+  node((0, 0), [$f^(-1)(x)$]),
+  node((0, 1), [$cal(C)$]),
+  node((1, 1), [$cal(D)$]),
+  node((1, 0), [$*$]),
+  arr((0, 0), (0, 1), []),
+  arr((0, 0), (1, 0), []),
+  arr((1, 0), (1, 1), []),
+  arr((0, 1), (1, 1), [$f$]),
+))
+]
+
+=== 余积的泛性质
+#axiom(title: "B.4'")[
+    #enum(numbering: "(1)")[
+        对于函子 $f: cal(C') -> cal(C)$ 和 $g: cal(D') -> cal(D)$，交换图
+        // https://t.yw.je/#N4Igdg9gJgpgziAXAbVABwnAlgFyxMJZABgBpiBdUkANwEMAbAVxiRAGNGAKAYQHIAlCAC+pdJlz5CKAIzkqtRizacGvPgAImYKQDo4ARw0ARQSLEgM2PASJkZC+s1aIQPc+OtSich9SfKrqq8WjoE+kbGQsIKMFAA5vBEoABmAE4QALZIZCA4EEgATNQMdABGMAwAChI20iBpWPEAFjgg-kouICke3RnZiLn5SHKKzmxYAPrB-NEW6VlF1MOIAMwd465TM3Op-SPLBWsbgd2heoYa8SIUwkA
+        #align(center)[#commutative-diagram(
+            node((0, 0), [$cal(C')$]),
+            node((0, 1), [$cal(C' union.sq D')$]),
+            node((1, 0), [$C$]),
+            node((1, 1), [$cal(C union.sq D)$]),
+            arr((0, 0), (1, 0), [$f$], label-pos: right),
+            arr((0, 0), (0, 1), [$i_cal(C')$]),
+            arr((1, 0), (1, 1), [$i_cal(C)$]),
+            arr((0, 1), (1, 1), [$f union.sq g$]),
+        ) #h(3em) #commutative-diagram(
+            node((0, 0), [$cal(D')$]),
+            node((0, 1), [$cal(C' union.sq D')$]),
+            node((1, 0), [$D$]),
+            node((1, 1), [$cal(C union.sq D)$]),
+            arr((0, 0), (1, 0), [$g$], label-pos: right),
+            arr((0, 0), (0, 1), [$i_cal(D')$]),
+            arr((1, 0), (1, 1), [$i_cal(D)$]),
+            arr((0, 1), (1, 1), [$f union.sq g$]),
+        )]
+        是拉回。
+    ][
+        若有函子 $h: cal(E) -> cal(C union.sq D)$，那么函子
+        #nonum-equation($
+                angle.l "pr"_cal(E), "pr"_cal(E) angle.r : 
+                cal((E times_(C union.sq D) C) union.sq (E times_(C union.sq D) D)) --> cal(E)
+                $)
+        是等价。
+    ]
+]
+这个公理的集合论版本是，若有映射 $S -> T_0 union.sq T_1$，则 $S$ 可以表示为 $T_0$ 和 $T_1$ 的原像的不交并。
+
+=== 函子范畴
+#axiom(title: "B.6")[
+    设 $cal(C),cal(D)$ 是两个无穷范畴，则存在无穷范畴 $"Fun"(cal(C),cal(D))$，称为 $cal(C),cal(D)$ 之间的*函子范畴*。
+    它满足*柯里化(currying)*性质：对另一无穷范畴 $cal(E)$ 和任意函子 $f: cal(E times C) -> cal(D)$，
+    都有函子 $f_c: E -> "Fun"(cal(C),cal(D))$。反过来也要满足*反柯里化(uncurrying)*性质：
+    对任意函子 $g : cal(E) -> "Fun"(cal(C), cal(D))$ 都有一个函子 $g^u: cal(E times C) -> cal(D)$。
+    这两个操作要在自然同构意义下可逆：$f tilde.equiv (f_c)^u$ 和 $g tilde.equiv (g^u)_c$。
+
+    当有函子 $f,f': cal(E times C) -> cal(D)$ 的自然同构 $alpha: f tilde.equiv f'$ 时，
+    就有自然同构 $alpha_c : f_c tilde.equiv f'_c$，称为 $alpha$ 的柯里化。
+    反过来若有 $g,g' : cal(E) -> "Fun"(cal(C), cal(D))$ 的自然同构 $beta: g tilde.equiv g'$，
+    则有自然同构 $beta^u : g^u tilde.equiv (g')^u$。
+    最后我们要求有 $3$-同构 $(alpha_c)^u tilde.equiv alpha$ 和 $(beta^u)_c tilde.equiv beta$。
+]
+
+#note-box[
+    如果 $cal(E) = *$，那么 $"Fun"(cal(C),cal(D))$ 的对象 $* -> "Fun"(cal(C),cal(D))$ 通过柯里化就对应于函子
+    $C tilde.equiv * times cal(C) -> cal(D)$。也就是说 $"Fun"(cal(C),cal(D))$ 可以视为从 $cal(C)$ 和 $cal(D)$
+    的函子组成的无穷范畴。
+]
+
+#axiom(title: [B.7 柯里化对 $cal(E)$ 具有函子性])[
+    给定函子 $g: cal(E) -> "Fun"(cal(C), cal(D))$，若有 $h: cal(E') -> cal(E)$，
+    则 $g compose h: cal(E') -> "Fun"(cal(C), cal(D))$ 的反柯里化应当和
+    $g^u compose (h times id_cal(C)): cal(E' times C) -> D$ 自然同构，这是反柯里化对 $cal(E)$ 的函子性。
+
+    给定函子 $f: cal(E times C) -> cal(D)$，若有 $h: cal(E') -> cal(E)$，则 
+    $f compose (h times id_cal(C)): cal(E' times C) -> cal(D)$ 的柯里化应当和
+    $f_c compose h : E' -> "Fun"(cal(C), cal(D))$ 自然同构，这是柯里化对 $cal(E)$ 的函子性。
+]
+柯里化的函子性和反柯里化的函子性可以互相推导，借助柯里化和反柯里化的一一对应即可。
+
+#definition(title: "求值函子")[
+    给定两个无穷范畴 $cal(C),cal(D)$，则*求值函子* $"ev": "Fun"(cal(C), cal(D)) times cal(C) -> cal(D)$ 定义为
+    $"ev" := (id_("Fun"(cal(C),cal(D))))^u$ 也就是单位函子 
+    $id_("Fun"(cal(C), cal(D))): "Fun"(cal(C), cal(D)) -> "Fun"(cal(C), cal(D))$ 的反柯里化。
+    如果有 $cal(C)$ 的对象 $x$，则我们定义函子 $"ev"_x : "Fun"(cal(C), cal(D)) -> cal(D)$ 为复合
+    #nonum-equation($
+            "ev"_x: "Fun"(cal(C), cal(D)) tilde.eq "Fun"(cal(C), cal(D)) times * -->^(id times x)
+            "Fun"(cal(C), cal(D)) times cal(C) -->^"ev" cal(D)
+                    $)
+    称为在 $x$ 处的求值函子。
+]
+
+#definition(title: "箭头范畴")[
+    设 $cal(C)$ 是无穷范畴。我们把函子范畴 $"Fun"([1], cal(C))$ 称为 $cal(C)$ 的*箭头范畴*。
+    注意到箭头范畴中的对象就是 $cal(C)$ 的态射。
+]
+
+#definition(title: "态射阿尼玛")[
+    设 $cal(C)$ 是无穷范畴。给定两个对象 $x,y$，我们定义 *态射阿尼玛*#footnote["阿尼玛"这个名字是 _anima_ 的音译，
+    意译通常是*无穷群胚*，但是这四个字音节较多，因此也有人意译为"生像"。] $"Hom"_cal(C)(x,y)$ 为求值函子的纤维，
+    也就是如下拉回：
+    #align(center, commutative-diagram(
+        node((0, 0), [$"Hom"_cal(C)(x,y)$]),
+        node((0, 1), [$"Fun"([1],cal(C))$]),
+        node((1, 0), [$*$]),
+        node((1, 1), [$cal(C times C)$]),
+        arr((0, 0), (0, 1), []),
+        arr((0, 0), (1, 0), []),
+        arr((1, 0), (1, 1), [$(x,y)$]),
+        arr((0, 1), (1, 1), [$("ev"_0, "ev"_1)$]),
+        ))
+]
+
+#definition(title: "自然变换")[
+    通过函子范畴可以定义无穷范畴函子之间的自然变换了（而不仅仅是自然同构），实际上就是如同一般范畴论定义为 
+    $"Fun"(cal(C), cal(D))$ 中的态射，也就是函子 $[1] -> "Fun"(cal(C), cal(D))$。
+    通过反柯里化，可以表示为函子 $[1] times cal(C) -> cal(D)$。我们把 $"Fun"(cal(C), cal(D))$ 的态射阿尼玛用
+    $"Nat"(f,g)$ 来表示：
+    #nonum-equation($
+                      "Nat"(f,g) := "Hom"_("Fun"(cal(C), cal(D)))(f,g)
+                    $)
+]
 
 == 交换方块公理，Segal 公理和 Rezk 公理
 上一节介绍了无穷范畴 $cal(C)$ 中的对象，态射和交换三角。我们希望这些构造满足我们希望的性质，也就是普通的范畴中应该就有的性质。为此我们需要本节标题的三个公理，它们通俗地说可以这么表述：
@@ -363,4 +520,4 @@ $]
 
 === 交换方块公理
 
-= 拟范畴
+//= 拟范畴
