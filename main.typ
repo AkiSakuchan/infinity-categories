@@ -248,9 +248,10 @@ $]
     两个无穷范畴 $cal(C), cal(D)$ 的乘积，由对象 $cal(C) times cal(D)$ 和两个函子 
     $"pr"_cal(C) : cal(C) times cal(D) -> cal(C)$，$"pr"_cal(D) : cal(C) times cal(D) -> cal(D)$，它们称为标准投射函子。
     它们满足乘积的泛性质，但是要把等号 $=$ 改为存在自然变换 $tilde.equiv$，包括唯一性也要改为在自然同构意义下唯一。
+    若有函子 $f: cal(T) -> cal(C)$ 和 $g: cal(T) -> cal(D)$，则它们的乘积表示为 $(f,g)$。
 
     这条公理说的就是任意两个无穷范畴都存在乘积范畴。
-]
+]<axiom:乘积>
 
 #lemma[
     对于无穷范畴 $cal(C), cal(D)$，函子 $("pr"_cal(D),"pr"_cal(C)): cal(C) times cal(D) -> cal(D) times cal(C)$ 
@@ -266,13 +267,91 @@ $]
 
 对于结合律，有
 #lemma[
-    对无穷范畴 $cal(C),cal(D),cal(E)$，函子
+    对无穷范畴 $cal(C),cal(D),cal(E)$，函子 
+    $("pr"_cal(C) compose "pr"_(cal(C) times cal(D)), ("pr"_cal(D) compose "pr"_(cal(C) times cal(D)), "pr"_cal(E))) : (cal(C) times cal(D)) times cal(E) -> cal(C) times (cal(D) times cal(E))$ 是范畴等价。
 ]
 
 #axiom(title: [B.4 $infinity$-范畴的余积])[
-    是上面公理的对偶版本，余积用 $product.co$ 表示。这条公理说任意两个无穷范畴 $cal(C), cal(D)$ 都存在余积 
-    $cal(C) product.co cal(D)$。
+    是上面公理的对偶版本，余积用 $union.sq$ 表示。标准插入函子用 $i_cal(C)$ 和 $i_cal(D)$ 来表示，
+    而函子 $f : cal(C) -> cal(T)$ 和 $g : cal(D) -> cal(T)$ 的余积用 $angle.l f,g angle.r$ 表示。
+    
+    这条公理说任意两个无穷范畴 $cal(C), cal(D)$ 都存在余积 $cal(C) union.sq cal(D)$。
 ]
+
+对余积也有类似乘积的交换律，结合律和单位元，这里余积的单位元是始范畴 $emptyset$。
+
+#remark[
+    无穷范畴乘积和余积具有函子性：给定任意两个函子 $f : cal(C) -> cal(C)'$ 和 $g : cal(D) -> cal(D)'$，那么有函子
+    #nonum-equation($
+        f times g &:= (f compose "pr"_cal(C) , g compose "pr"_cal(D)) : cal(C) times cal(D) --> cal(C)' times cal(D)' \
+        f union.sq g &:= angle.l i_cal(C') compose f, i_cal(D') compose g angle.r : cal(C) union.sq cal(D) --> cal(C)' union.sq cal(D)'
+    $)
+    这个构造具有函子性：
+    #nonum-equation($
+        id_cal(C) times id_cal(D) &tilde.equiv id_cal(C times D) #h(2em)
+        (f' times g') compose (f times g) &tilde.equiv (f' compose f) times (g' compose g) \
+        id_cal(C) union.sq id_cal(D) &tilde.equiv id_cal(C union.sq D) #h(2em)
+        (f' union.sq g') compose (f union.sq g) &tilde.equiv (f' compose f) union.sq (g' compose g)
+    $)
+]
+
+=== 无穷范畴的拉回
+拉回要复杂一点。
+#axiom(title: "B.5 无穷范畴的拉回")[
+    给定两个函子 $f: cal(C) -> cal(E)$ 和 $f: cal(D) -> cal(E)$，则存在它们的*拉回*，
+    也称为 $cal(C)$ 和 $cal(D)$ 在 $cal(E)$ 上的*纤维积*，记为 $cal(C times_E D)$，它是无穷范畴，并且还有两个标准投射
+    $"pr"_cal(C) : cal(C) -> cal(C times_E D)$ 和 $"pr"_cal(C) : cal(C) -> cal(C times_E D)$。
+    它们有交换图，当然是自然同构意义下，此后不再专门说明：
+    #align(center, commutative-diagram(
+        node((0, 0), [$cal(C times_E D)$]),
+        node((0, 1), [$cal(C)$]),
+        node((1, 0), [$cal(D)$]),
+        node((1, 1), [$cal(E)$]),
+        arr((0, 0), (0, 1), [$"pr"_cal(C)$]),
+        arr((0, 0), (1, 0), [$"pr"_cal(D)$], label-pos: right),
+        arr((0, 1), (1, 1), [$f$]),
+        arr((1, 0), (1, 1), [$g$], label-pos: left),
+    ))
+
+    给定两个函子 $t_1 : cal(T) -> cal(C)$ 和 $t_2 : cal(T) -> cal(D)$，并且有自然同构
+    $f compose t_1 tilde.equiv g compose t_2$，
+    那么存在一个函子 $t = (t_1,t_2): cal(T) -> cal(C times_E D)$ 使得 $"pr"_cal(C) compose t tilde.equiv t_1$
+    以及 $"pr"_cal(D) compose t tilde.equiv t_2$，用交换图表示是：
+    #align(center, commutative-diagram(
+        node((1, 1), [$cal(C times_E D)$]),
+        node((1, 2), [$cal(C)$]),
+        node((2, 1), [$cal(D)$]),
+        node((2, 2), [$cal(E)$]),
+        node((0, 0), [$T$]),
+        arr((1, 1), (1, 2), [$"pr"_cal(C)$]),
+        arr((1, 1), (2, 1), [$"pr"_cal(D)$], label-pos: right),
+        arr((1, 2), (2, 2), [$f$]),
+        arr((2, 1), (2, 2), [$g$], label-pos: left),
+        arr((0, 0), (1, 1), [$t$], label-pos: 0, "dashed"),
+        arr((0, 0), (1, 2), [$t_1$], curve: 30deg),
+        arr((0, 0), (2, 1), [$t_2$], curve: -30deg, label-pos: right),
+    ))
+
+    对于唯一性，表述如下：如果有两个函子 $t,t' : cal(T) -> cal(C times_E D)$，以及两个自然同构
+    $alpha : "pr"_cal(C) compose t tilde.equiv "pr"_cal(C) compose t'$ 和
+    $beta: "pr"_cal(D) compose t tilde.equiv "pr"_cal(D) compose t'$，并且它们使得下图交换：
+    #align(center, commutative-diagram(
+        node((0, 0), [$f compose "pr"_cal(C) compose t$]),
+        node((0, 1), [$f compose "pr"_cal(C) compose t'$]),
+        node((1, 0), [$g compose "pr"_cal(D) compose t$]),
+        node((1, 1), [$g compose "pr"_cal(D) compose t'$]),
+        arr((0, 0), (1, 0), [$tilde.equiv$], label-pos: right),
+        arr((0, 0), (0, 1), [$f compose alpha$], label-pos: left),
+        arr((0, 1), (1, 1), [$tilde.equiv$]),
+        arr((1, 0), (1, 1), [$g compose beta$]),
+    ))
+    则存在自然同构 $(alpha,beta): t tilde.equiv t'$ 使得有 $3$-同构 
+    $"pr"_cal(C) compose (alpha,beta) tilde.equiv alpha$ 和
+    $"pr"_cal(D) compose (alpha,beta) tilde.equiv beta$。
+]
+
+不难看出，这个公理实际上包含了@axiom:乘积：只要让 $cal(E) = *$ 即可。
+
 
 == 交换方块公理，Segal 公理和 Rezk 公理
 上一节介绍了无穷范畴 $cal(C)$ 中的对象，态射和交换三角。我们希望这些构造满足我们希望的性质，也就是普通的范畴中应该就有的性质。为此我们需要本节标题的三个公理，它们通俗地说可以这么表述：
