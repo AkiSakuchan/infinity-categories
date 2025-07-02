@@ -399,6 +399,21 @@ $]
 ))
 ]
 
+#definition(title: "拉回方块")[
+    交换方块
+    #align(center, commutative-diagram(
+        node((0, 0), [$cal(T)$]),
+        node((0, 1), [$cal(C)$]),
+        node((1, 0), [$cal(D)$]),
+        node((1, 1), [$cal(E)$]),
+        arr((0, 0), (0, 1), [$t$]),
+        arr((0, 0), (1, 0), [$s$], label-pos: right),
+        arr((0, 1), (1, 1), [$f$]),
+        arr((1, 0), (1, 1), [$g$], label-pos: right),
+    ))
+    被称为*拉回方块*指的是它诱导的函子 $(s,t): cal(T) -> cal(C times_E D)$ 是范畴等价。
+]
+
 === 余积的泛性质
 #axiom(title: "B.4'")[
     #enum(numbering: "(1)")[
@@ -510,6 +525,67 @@ $]
                     $)
 ]
 
+#definition(title: "函子范畴的函子性")[
+    给定函子 $g: cal(D) -> cal(D')$，那么我们定义函子 
+    $g compose - : "Fun"(cal(C), cal(D)) -> "Fun"(cal(C), cal(D'))$ 为下列复合的柯里化：
+    #nonum-equation($
+                "Fun"(cal(C), cal(D)) times cal(C) -->^"ev" cal(D) -->^g cal(D')
+                    $)
+    这显然是普通范畴论中相关定义的直接推广。类似地，给定函子 $f: cal(C') -> cal(C)$，我们定义函子
+    $- compose f: "Fun"(cal(C'), cal(D)) -> "Fun"(cal(C), cal(D))$ 为下列复合的柯里化：
+    #nonum-equation($
+        "Fun"(cal(C'), cal(D)) times cal(C) -->^(id times f) "Fun"(cal(C'), cal(D)) times cal(C')
+        -->^"ev" cal(D)
+                    $)
+    
+    通过水平复合以及自然同构的柯里化可以得到，每个自然同构 $beta: g tilde.equiv g'$ 诱导一个自然同构
+    $(beta compose "ev"): (g compose -) tilde.equiv (g' compose -)$。类似地对 $- compose f$ 也成立。
+
+    我们经常用 $g_*$ 和 $f^*$ 来表示这种 "Hom" 函子：
+    #nonum-equation($
+            g_* &:= g compose - : "Fun"(cal(C), cal(D)) --> "Fun"(cal(C), cal(D')), \
+            f^* &:= - compose f : "Fun"(cal(C'), cal(D)) -> "Fun"(cal(C), cal(D))
+                    $)
+]
+
+#lemma[
+    $g mapsto g_*$ 和 $f mapsto f^*$ 具有函子性，也就是 
+    #nonum-equation($
+        (id_cal(D))_* &tilde.equiv id_("Fun"(cal(C), cal(D))) #h(4em) 
+        (g' compose g)_* tilde.equiv g'_* compose g_* \
+        (id_cal(C))^* &tilde.equiv id_("Fun"(cal(C), cal(D))) #h(4em)
+        (f compose f')^* tilde.equiv f'^* compose f^*
+        $)
+    这里 $g : cal(D) -> cal(D'), g' : cal(D') -> cal(D'')$ 以及
+    $f: cal(C') -> cal(C), f' : cal(C'') -> cal(C')$。
+]
+#proof[
+    关于单位态射，直接从定义得到。根据柯里化的函子性和求值函子的定义，可以得到
+    $"ev" compose (g_* times id_cal(C))$ 的柯里化和 $"ev"_c compose g_* tilde.equiv g_* tilde.equiv (g compose "ev")_c$ 同构，因此有
+    #nonum-equation($
+            "ev" compose (g_* times id_cal(C)) tilde.equiv g compose "ev"
+    $)
+    以及 
+    #nonum-equation($
+            g' compose "ev" compose (g_* times id_cal(C)) tilde.equiv (g' compose g) compose "ev"
+    $)
+    再一次根据柯里化的函子性和 $g_*$ 的定义，对上式取柯里化可得 $g'_* compose g_* tilde.equiv (g' compose g)_*$。
+    #align(center, commutative-diagram(
+        node((0, 0), [$"Fun"(cal(C),cal(D)) times cal(C)$]),
+        node((0, 1), [$cal(D)$]),
+        node((1, 0), [$"Fun"(cal(C),cal(D')) times cal(C)$]),
+        node((1, 1), [$cal(D')$]),
+        node((1, 2), [$cal(D'')$]),
+        arr((0, 0), (0, 1), [$"ev"$]),
+        arr((0, 1), (1, 1), [$g$]),
+        arr((1, 0), (1, 1), [$"ev"$]),
+        arr((0, 0), (1, 0), [$g_* times id_cal(C)$], label-pos: right),
+        arr((1, 1), (1, 2), [$g'$]),
+    ))
+
+    对 $f mapsto f^*$ 也是类似的。
+]
+
 == 交换方块公理，Segal 公理和 Rezk 公理
 上一节介绍了无穷范畴 $cal(C)$ 中的对象，态射和交换三角。我们希望这些构造满足我们希望的性质，也就是普通的范畴中应该就有的性质。为此我们需要本节标题的三个公理，它们通俗地说可以这么表述：
 - 态射的交换方块指的是函子 $[1] times [1] -> cal(C)$，而交换方块公理说的就是这个和两个交换三角一一对应。
@@ -519,5 +595,65 @@ $]
 下面我们一个个介绍。
 
 === 交换方块公理
+#definition[
+    无穷范畴 $cal(C)$ 中的交换方块是函子 $[1] times [1] -> cal(C)$，它可以用图表示：
+    #align(center, commutative-diagram(
+        node((0, 0), [$x$]),
+        node((0, 1), [$y$]),
+        node((1, 0), [$z$]),
+        node((1, 1), [$w$]),
+        arr((0, 0), (0, 1), [$f$]),
+        arr((0, 1), (1, 1), [$h$]),
+        arr((0, 0), (1, 0), [$g$], label-pos: right),
+        arr((1, 0), (1, 1), [$k$], label-pos: right),
+))
+]
+
+交换方块公理说的是交换方块和两个显而易见的交换三角一一对应。从函子范畴的角度，交换方块的范畴可以用
+$"Fun"([1] times [1], cal(C))$ 来表示。而交换三角的范畴是 $"Fun"([2], cal(C))$。
+面映射 $d_1: [1] -> [2]$ 表示把三角的 "0-2" 边，于是它诱导的函子
+$d_1^* : "Fun"([2], cal(C)) -> "Fun"([1], cal(C))$ 表示获取交换三角的 "0-2" 边（合成态射的边）。
+于是两个 "0-2" 边相同的交换三角的对组成的范畴可以表示为两个 $d_1^*$ 的拉回
+#nonum-equation($
+                  "Fun"([2], cal(C)) times_("Fun"([1], cal(C))) "Fun"([2], cal(C))
+                $)
+
+而方块 $[1] times [1]$ 上三角部分依次是是 $(0,0),(0,1),(1,1)$，和 $[2]$ 一一对应是函子 $j_0 := (s_0,s_1)$，
+即 $j_0$ 把 $[2]$ "贴"到 $[1] times [1]$ 的上三角部分。类似地 $j_1 := (s_1,s_0)$ 把 $[2]$ 和下三角部分一一对应。
+于是 $j_1^*,j_2^*: "Fun"([1] times [1], cal(C)) -> "Fun"([2], cal(C))$ 表示从交换方块得到它的上下三角部分的函子。
+
+注意到有交换图：
+#align(center, commutative-diagram(
+        node((0, 0), [$[1]$]),
+        node((0, 1), [$[2]$]),
+        node((1, 0), [$[2]$]),
+        node((1, 1), [$[1] times [1]$]),
+        arr((0, 0), (0, 1), [$d_1$]),
+        arr((0, 1), (1, 1), [$j_0$]),
+        arr((0, 0), (1, 0), [$d_1$], label-pos: right),
+        arr((1, 0), (1, 1), [$j_1$], label-pos: right),
+))
+因此根据函子范畴的函子性，有 $d_1^* compose j_0^* tilde.equiv d_1^* compose j_1^*$，这可以诱导一个函子：
+#nonum-equation($
+        (j_0^*, j_1^*): "Fun"([1] times [1], cal(C)) --> 
+        "Fun"([2], cal(C)) times_("Fun"([1], cal(C))) "Fun"([2], cal(C))
+                $)
+因此交换方块公理的严格表述就是
+#axiom(title: "D")[
+    上面的 $(j_0^*, j_1^*)$ 是范畴等价，或者也可以等价表述为
+    #align(center, commutative-diagram(
+        node((0, 0), [$"Fun"([1] times [1], cal(C))$]),
+        node((0, 1), [$"Fun"([2], cal(C))$]),
+        node((1, 0), [$"Fun"([2], cal(C))$]),
+        node((1, 1), [$"Fun"([1], cal(C))$]),
+        arr((0, 0), (0, 1), [$j_1^*$]),
+        arr((0, 1), (1, 1), [$d_1^*$]),
+        arr((0, 0), (1, 0), [$j_0^*$], label-pos: right),
+        arr((1, 0), (1, 1), [$d_1^*$], label-pos: right),
+))
+是拉回方块。
+]
+
+=== Segal 公理
 
 //= 拟范畴
