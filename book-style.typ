@@ -76,7 +76,7 @@
 
   body
 
-  if bibliography != none {
+  if bib-file != none {
     v(2em)
     counter(heading).update(0) // 重置章节计数器
     bibliography(bib-file,
@@ -92,7 +92,4 @@
     math.equation(body, numbering: none, block: true)
 }
 // 花体字母
-#let scr(it) = text(
-  features: ("ss01",),
-  box($cal(it)$),
-)
+#let scr(it) = math.class("normal", text(font:"KaTeX_Script")[#it #h(0.29em)])
