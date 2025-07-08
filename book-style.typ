@@ -66,6 +66,10 @@
     section-counter.at(1, default: 0), n)
   })
 
+  // 链接颜色和引用文献颜色
+  show link: set text(fill: rgb(204,33,96))
+  show cite: set text(fill: rgb(17,32,233))
+
   //show math.equation: set text(lang:"zh", font: (LatinFont, NotoSongti))
 
   outline(title: auto, depth: 2)
