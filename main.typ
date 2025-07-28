@@ -280,7 +280,7 @@ $]
 
 对余积也有类似乘积的交换律，结合律和单位元，这里余积的单位元是始范畴 $emptyset$。
 
-#remark[
+#note-box[
     无穷范畴乘积和余积具有函子性：给定任意两个函子 $f : cal(C) -> cal(C)'$ 和 $g : cal(D) -> cal(D)'$，那么有函子
     #nonum-equation($
         f times g &:= (f compose "pr"_cal(C) , g compose "pr"_cal(D)) : cal(C) times cal(D) --> cal(C)' times cal(D)' \
@@ -394,7 +394,7 @@ $]
   node((1, 0), [$*$]),
   arr((0, 0), (0, 1), []),
   arr((0, 0), (1, 0), []),
-  arr((1, 0), (1, 1), []),
+  arr((1, 0), (1, 1), [$x$]),
   arr((0, 1), (1, 1), [$f$]),
 ))
 ]
