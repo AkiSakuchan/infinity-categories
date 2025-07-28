@@ -59,6 +59,10 @@
   show math.equation.where(block:true): set par( leading: 0.7em)
 
   // 数学公式编号样式
+  show heading.where(level: 2): it =>{
+    counter(math.equation).update(0) // 每次显示二级标题就更新一次公式计数器
+    it
+  }
   set math.equation(numbering: n => {
     let section-counter = counter(heading).get()
     numbering("(1.1.1)", 
